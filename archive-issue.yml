@@ -1,0 +1,21 @@
+---
+ 
+- hosts: 127.0.0.1
+  tasks:
+    - name: Createa dummy file
+      file:
+        path: /tmp/test.txt
+        state: touch
+    - name: Archive the dummy file
+      command: "tar -pczf /tmp/test.tar.gz /tmp/test.txt"
+      args:
+        chdir: /tmp
+
+- hosts: "{{ other_host }}"
+  tasks:
+    - name: Unarchive the pushed shib archive
+      unarchive:
+        src: "/tmp/test.tar.gz"
+        dest: /tmp/
+        owner: root
+        group: root
